@@ -1,0 +1,49 @@
+ .container {
+     background-color: #97f68e;
+      font-family: Arial, sans-serif;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    h1,h2,h3 {
+      color: #fff;
+      background-color: #333;
+      padding: 10px;
+      border-radius: 5px;
+    text-align: center;
+    }
+
+    label {
+      margin-bottom: 5px;
+      text-align: center;
+    }
+
+    input[type="text"] {
+      padding: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
+    }
+
+    .update-button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .update-button:active {
+      background-color: #8e45a0;
+    }
+    .charts{
+      width:min-content;
+      height: min-content;
+      display: inline-block;
+    }
+    .chart{
+      display: block;
+    }

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html ng-app="dashboardApp">
+<head>
+  <title>Dynamic Dashboard</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a href="D:\Angularjs project\credits.html" target="_blank">Credits</a>
+<div ng-controller="dashboardController" class="container">
+  <h1> AngularJs Dynamic Dashboard For  Data visualization</h1> 
+  <!-- Input form for user data -->
+  <form ng-submit="updateData()">
+    <label>Enter Datas those which are need to be analyzed:</label>
+    <input type="text" ng-model="inputData" placeholder="Enter data">
+    <button type="submit" class="update-button">Update Data</button>
+  </form>
+  <!-- Display analytics -->
+  <div ng-if="data">
+    <h2>Data Analytics</h2>
+    <p>Total  Input Data: {{ data.length }}</p>
+    <p>Total Data  you entered can be visualized using the following charts:PIECHART, BARCHART, LINECHART, RADARCHART</p>
+  </div>
+  <!-- Display charts -->
+  <!-- Display pie chart -->  
+  <div class="charts">
+    <h3>Pie Chart</h3>
+    <canvas class="chart"   id="pieChart" width="250px" height="250px"></canvas>
+    <!-- Display bar chart -->
+    <h3>Bar Chart</h3>
+    <canvas class="chart"  id="barChart" width="250px" height="250px"></canvas>
+    <!-- Display line chart -->
+    <h3>Line Chart</h3>
+    <canvas class="chart"   id="lineChart" width="250px" height="250px"></canvas>
+    <!-- Display radar chart -->
+    <h3>Radar Chart</h3>
+    <canvas class="chart"   id="radarChart" width="250px" height="250px"></canvas>
+  </div>
+</div>
+<script>
+  angular.module('dashboardApp', [])
+  .controller('dashboardController', ['$scope', function($scope) {
+    $scope.data = [];
+    $scope.inputData = '';
+    $scope.updateData = function() {
+      if ($scope.inputData.trim() !== '') {
+        // Check if input data contains numbers with strings
+        if (/^\d+(\.\d+)?(,\s*\d+(\.\d+)?)*$/.test($scope.inputData.trim())) {
+          var newData = $scope.inputData.trim().split(',');
+          $scope.data = $scope.data.concat(newData);
+          $scope.inputData = '';
+          updateCharts();
+        } else {
+          alert('Please enter  only numbers.');
+        }
+      }
+    };
+    function updateCharts() {
+      updatePieChart();
+      updateBarChart();
+      updateLineChart();
+      updateRadarChart();
+    }
+    function updatePieChart() {
+      var numericalData = $scope.data.filter(function(data) {
+        return !isNaN(parseFloat(data));
+      }).map(Number);
+      var labels = $scope.data.map(function(data, index) { return 'Data ' + (index + 1); });
+      var ctx = document.getElementById('pieChart').getContext('2d');
+      var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Data',
+            data: numericalData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Pie Chart'
+            }
+          }
+        }
+      });
+    }
+    function updateBarChart() {
+      var numericalData = $scope.data.filter(function(data) {
+        return !isNaN(parseFloat(data));
+      }).map(Number);
+      var labels = $scope.data.map(function(data, index) { return 'Data ' + (index + 1); });
+      var ctx = document.getElementById('barChart').getContext('2d');
+      var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Data',
+            data: numericalData,
+            backgroundColor: 'rgba(54, 162, 235, 0.6)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Bar Chart'
+            }
+          }
+        }
+      });
+    }
+    function updateLineChart() {
+      var numericalData = $scope.data.filter(function(data) {
+        return !isNaN(parseFloat(data));
+      }).map(Number);
+      var labels = $scope.data.map(function(data, index) { return 'Data ' + (index + 1); });
+      var ctx = document.getElementById('lineChart').getContext('2d');
+      var myLineChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Data',
+            data: numericalData,
+            fill: false,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Line Chart'
+            }
+          }
+        }
+      });
+    }
+    function updateRadarChart() {
+      var numericalData = $scope.data.filter(function(data) {
+        return !isNaN(parseFloat(data));
+      }).map(Number);
+      var labels = $scope.data.map(function(data, index) { return 'Data ' + (index + 1); });
+      var ctx = document.getElementById('radarChart').getContext('2d');
+      var myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Data',
+            data: numericalData,
+            backgroundColor: 'rgba(255, 99, 132, 0.6)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: 'Radar Chart'
+            }
+          }
+        }
+      });
+    }
+  }]);
+</script>
+</body>
+</html>
